@@ -1,8 +1,9 @@
-// ===== إعدادات =====
-const PHONE_MAJIDIYA = "966593937921"; // مؤقتاً رقمك
-const PHONE_MIYAS    = "966593937921"; // مؤقتاً رقمك
+// ===== أرقام الفروع (مؤقتاً رقمك) =====
+// wa.me يحتاج صيغة دولية بدون 0
+const PHONE_MAJIDIYA = "966593937921";
+const PHONE_MIYAS    = "966593937921";
 
-// ===== منيو تجريبي (عدّل الصور حسب اللي عندك) =====
+// ===== منيو تجريبي (بدّل لاحقاً بالشيت) =====
 const MENU = [
   {
     category: "سمبوسة",
@@ -11,7 +12,7 @@ const MENU = [
         id: "s1",
         name: "بوكس سمبوسة (36 حبة)",
         price: 30,
-        img: "assets/box.jpg", // ارفع صورة أو اتركها
+        img: "assets/box.jpg",
         desc: "جميع الأصناف (9 حشوات): ماش، بطاطس، جبن، بيتزا، فلافل باللبنة، لبنة بالزيتون، لحم، فاهيتا دجاج، شاورما دجاج."
       },
       {
@@ -33,64 +34,50 @@ const MENU = [
   {
     category: "فلافل",
     items: [
-      { id: "f1", name: "بوكس فلافل (45 حبة)", price: 15, img: "assets/falafel.jpg", desc: "فلافل طازج ومقرمش." }
+      { id:"f1", name:"بوكس فلافل (45 حبة)", price:15, img:"assets/falafel.jpg", desc:"فلافل طازج ومقرمش." }
     ]
   },
   {
     category: "مقالي",
     items: [
-      { id: "m1", name: "بوكس مبصل (باكورة) (20 حبة)", price: 15, img: "assets/box.jpg", desc: "مقرمش وخفيف." },
-      { id: "m2", name: "بوكس كباب عروق (20 حبة)", price: 0, img: "assets/box.jpg", desc: "اكتب السعر لاحقاً (حالياً 0)." }
+      { id:"m1", name:"بوكس مبصل (باكورة) (20 حبة)", price:15, img:"assets/box.jpg", desc:"مقرمش وخفيف." },
+      { id:"m2", name:"بوكس كباب عروق (20 حبة)", price:0, img:"assets/box.jpg", desc:"ضع السعر لاحقاً (حالياً 0)." }
     ]
   }
 ];
 
-// ===== حالة التطبيق =====
+// ===== State =====
 const state = {
-  branch: localStorage.getItem("branch") || null,
+  branch: localStorage.getItem("branch") || "",
   cart: JSON.parse(localStorage.getItem("cart") || "{}") // {id: qty}
 };
 
-// ===== عناصر DOM =====
-const branchPage = document.getElementById("branchPage");
-const menuPage   = document.getElementById("menuPage");
+// ===== DOM =====
+const pageBranch = document.getElementById("pageBranch");
+const pageMenu   = document.getElementById("pageMenu");
+
+const cartBtn = document.getElementById("cartBtn");
+const cartCount = document.getElementById("cartCount");
+const checkoutBtn = document.getElementById("checkoutBtn");
+const checkoutCount = document.getElementById("checkoutCount");
+
+const tabs = document.getElementById("tabs");
+const items = document.getElementById("items");
 const branchPill = document.getElementById("branchPill");
-const tabsEl     = document.getElementById("tabs");
-const itemsEl    = document.getElementById("items");
+const changeBranch = document.getElementById("changeBranch");
 
-const cartMiniBtn = document.getElementById("cartMiniBtn");
-const cartCount   = document.getElementById("cartCount");
-const fabCount    = document.getElementById("fabCount");
-const checkoutFab = document.getElementById("checkoutFab");
-
-const overlay        = document.getElementById("overlay");
-const closeOverlayBtn= document.getElementById("closeOverlayBtn");
-const cartList       = document.getElementById("cartList");
-const totalPriceEl   = document.getElementById("totalPrice");
-const sheetBranch    = document.getElementById("sheetBranch");
-const sendWhatsAppBtn= document.getElementById("sendWhatsAppBtn");
-const customerName   = document.getElementById("customerName");
-const customerPhone  = document.getElementById("customerPhone");
-const changeBranchBtn= document.getElementById("changeBranchBtn");
+const overlay = document.getElementById("overlay");
+const closeOverlay = document.getElementById("closeOverlay");
+const sheetBranch = document.getElementById("sheetBranch");
+const cartList = document.getElementById("cartList");
+const totalPriceEl = document.getElementById("totalPrice");
+const custName = document.getElementById("custName");
+const custPhone = document.getElementById("custPhone");
+const sendWA = document.getElementById("sendWA");
 
 // ===== Helpers =====
 function saveCart(){
   localStorage.setItem("cart", JSON.stringify(state.cart));
-}
-
-function setBranch(branch){
-  state.branch = branch;
-  localStorage.setItem("branch", branch);
-}
-
-function branchLabel(){
-  if(state.branch === "majidiya") return "الفرع المختار: فرع المجيدية";
-  if(state.branch === "miyas") return "الفرع المختار: فرع مياس";
-  return "";
-}
-
-function branchPhone(){
-  return state.branch === "miyas" ? PHONE_MIYAS : PHONE_MAJIDIYA;
 }
 
 function formatSAR(n){
@@ -103,207 +90,217 @@ function cartTotalCount(){
 }
 
 function getItemById(id){
-  for(const cat of MENU){
-    const found = cat.items.find(x => x.id === id);
-    if(found) return { ...found, category: cat.category };
+  for(const c of MENU){
+    const it = c.items.find(x => x.id === id);
+    if(it) return { ...it, category: c.category };
   }
   return null;
 }
 
 function cartTotalPrice(){
-  let total = 0;
+  let t = 0;
   for(const [id, qty] of Object.entries(state.cart)){
-    const item = getItemById(id);
-    if(item) total += (Number(item.price)||0) * qty;
+    const it = getItemById(id);
+    if(it) t += (Number(it.price)||0) * qty;
   }
-  return total;
+  return t;
+}
+
+function branchLabel(){
+  if(state.branch === "majidiya") return "الفرع المختار: فرع المجيدية";
+  if(state.branch === "miyas") return "الفرع المختار: فرع مياس";
+  return "اختر الفرع";
+}
+
+function branchPhone(){
+  return state.branch === "miyas" ? PHONE_MIYAS : PHONE_MAJIDIYA;
 }
 
 function updateCounts(){
   const c = cartTotalCount();
   cartCount.textContent = String(c);
-  fabCount.textContent  = String(c);
-  cartMiniBtn.style.opacity = c > 0 ? "1" : ".85";
+  checkoutCount.textContent = String(c);
 }
 
-// ===== UI Render =====
-function showBranchPage(){
-  branchPage.classList.remove("hidden");
-  menuPage.classList.add("hidden");
+// ===== Page control =====
+function showBranch(){
+  pageMenu.hidden = true;
+  pageBranch.hidden = false;
 }
 
-function showMenuPage(){
-  branchPage.classList.add("hidden");
-  menuPage.classList.remove("hidden");
+function showMenu(){
+  pageBranch.hidden = true;
+  pageMenu.hidden = false;
   branchPill.textContent = branchLabel();
 }
 
+// ===== Render =====
 function renderTabs(){
-  tabsEl.innerHTML = "";
+  tabs.innerHTML = "";
   MENU.forEach((cat, idx) => {
-    const btn = document.createElement("button");
-    btn.className = "tab" + (idx === 0 ? " active" : "");
-    btn.textContent = cat.category;
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-      btn.classList.add("active");
-      const el = document.getElementById(`sec-${cat.category}`);
-      if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+    const b = document.createElement("button");
+    b.className = "tab" + (idx === 0 ? " active" : "");
+    b.type = "button";
+    b.textContent = cat.category;
+    b.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+      b.classList.add("active");
+      const sec = document.getElementById("sec-" + cat.category);
+      if(sec) sec.scrollIntoView({behavior:"smooth", block:"start"});
     });
-    tabsEl.appendChild(btn);
+    tabs.appendChild(b);
   });
 }
 
 function renderItems(){
-  itemsEl.innerHTML = "";
+  items.innerHTML = "";
   MENU.forEach((cat) => {
     const title = document.createElement("div");
-    title.className = "section-title";
-    title.id = `sec-${cat.category}`;
+    title.className = "section";
+    title.id = "sec-" + cat.category;
     title.textContent = cat.category;
-    itemsEl.appendChild(title);
+    items.appendChild(title);
 
-    cat.items.forEach((item) => {
+    cat.items.forEach((it) => {
       const card = document.createElement("div");
-      card.className = "item-card";
+      card.className = "card";
 
       const img = document.createElement("img");
-      img.className = "item-img";
-      img.src = item.img || "";
-      img.alt = item.name;
-
-      // لو الصورة غير موجودة
-      img.onerror = () => {
-        img.removeAttribute("src");
-        img.style.background = "linear-gradient(135deg, rgba(47,75,91,.12), rgba(195,122,99,.10))";
-      };
+      img.className = "photo";
+      img.src = it.img || "";
+      img.alt = it.name;
+      img.onerror = () => img.removeAttribute("src");
 
       const info = document.createElement("div");
-      info.className = "item-info";
+      info.className = "info";
 
       const name = document.createElement("h3");
-      name.className = "item-name";
-      name.textContent = item.name;
+      name.className = "name";
+      name.textContent = it.name;
 
-      const desc = document.createElement("p");
-      desc.className = "item-desc";
-      desc.textContent = item.desc || "";
+      const desc = document.createElement("div");
+      desc.className = "desc";
+      desc.textContent = it.desc || "";
 
-      const bottom = document.createElement("div");
-      bottom.className = "item-bottom";
+      const row = document.createElement("div");
+      row.className = "row";
 
       const price = document.createElement("div");
       price.className = "price";
-      price.textContent = formatSAR(item.price);
+      price.textContent = formatSAR(it.price);
 
-      const qtyWrap = document.createElement("div");
-      qtyWrap.className = "qty";
+      const qty = document.createElement("div");
+      qty.className = "qty";
 
       const minus = document.createElement("button");
       minus.className = "qbtn";
+      minus.type = "button";
       minus.textContent = "−";
 
       const qnum = document.createElement("div");
       qnum.className = "qnum";
-      qnum.textContent = String(state.cart[item.id] || 0);
+      qnum.textContent = String(state.cart[it.id] || 0);
 
       const plus = document.createElement("button");
       plus.className = "qbtn";
+      plus.type = "button";
       plus.textContent = "+";
 
       minus.addEventListener("click", () => {
-        const cur = state.cart[item.id] || 0;
+        const cur = state.cart[it.id] || 0;
         if(cur > 0){
           const next = cur - 1;
-          if(next === 0) delete state.cart[item.id];
-          else state.cart[item.id] = next;
+          if(next === 0) delete state.cart[it.id];
+          else state.cart[it.id] = next;
           saveCart();
-          qnum.textContent = String(state.cart[item.id] || 0);
+          qnum.textContent = String(state.cart[it.id] || 0);
           updateCounts();
         }
       });
 
       plus.addEventListener("click", () => {
-        const cur = state.cart[item.id] || 0;
-        state.cart[item.id] = cur + 1;
+        const cur = state.cart[it.id] || 0;
+        state.cart[it.id] = cur + 1;
         saveCart();
-        qnum.textContent = String(state.cart[item.id] || 0);
+        qnum.textContent = String(state.cart[it.id] || 0);
         updateCounts();
       });
 
-      qtyWrap.append(minus, qnum, plus);
-      bottom.append(price, qtyWrap);
+      qty.append(minus, qnum, plus);
+      row.append(price, qty);
 
-      info.append(name, desc, bottom);
+      info.append(name, desc, row);
       card.append(img, info);
-      itemsEl.appendChild(card);
+      items.appendChild(card);
     });
   });
 }
 
+// ===== Overlay cart =====
 function openOverlay(){
   sheetBranch.textContent = branchLabel();
-  overlay.classList.remove("hidden");
+  overlay.hidden = false;
   document.body.style.overflow = "hidden";
-  renderCartOverlay();
+  renderCart();
 }
 
-function closeOverlay(){
-  overlay.classList.add("hidden");
+function closeOverlayFn(){
+  overlay.hidden = true;
   document.body.style.overflow = "";
 }
 
-function renderCartOverlay(){
+function renderCart(){
   cartList.innerHTML = "";
   const entries = Object.entries(state.cart);
 
   if(entries.length === 0){
-    const empty = document.createElement("div");
-    empty.style.color = "#64748B";
-    empty.style.textAlign = "center";
-    empty.style.padding = "10px 0";
-    empty.textContent = "سلتك فاضية حالياً. اختر أصناف من المنيو.";
-    cartList.appendChild(empty);
+    const e = document.createElement("div");
+    e.style.textAlign = "center";
+    e.style.color = "#64748B";
+    e.style.padding = "10px 0";
+    e.textContent = "سلتك فاضية. اختر أصناف من المنيو.";
+    cartList.appendChild(e);
   } else {
-    entries.forEach(([id, qty]) => {
-      const item = getItemById(id);
-      if(!item) return;
+    for(const [id, qty] of entries){
+      const it = getItemById(id);
+      if(!it) continue;
 
       const row = document.createElement("div");
       row.className = "cart-row";
 
       const left = document.createElement("div");
-      left.className = "left";
+      left.className = "c-left";
 
-      const cname = document.createElement("div");
-      cname.className = "cname";
-      cname.textContent = item.name;
+      const n = document.createElement("div");
+      n.className = "c-name";
+      n.textContent = it.name;
 
-      const cprice = document.createElement("div");
-      cprice.className = "cprice";
-      cprice.textContent = `${formatSAR(item.price)} • الكمية: ${qty}`;
+      const m = document.createElement("div");
+      m.className = "c-meta";
+      m.textContent = `${formatSAR(it.price)} • الكمية: ${qty}`;
 
-      left.append(cname, cprice);
+      left.append(n, m);
 
       const right = document.createElement("div");
-      right.style.display = "flex";
-      right.style.alignItems = "center";
-      right.style.gap = "8px";
+      right.className = "qty";
 
       const minus = document.createElement("button");
       minus.className = "qbtn";
+      minus.type = "button";
       minus.textContent = "−";
 
-      const qnum = document.createElement("div");
-      qnum.className = "qnum";
-      qnum.textContent = String(qty);
+      const qn = document.createElement("div");
+      qn.className = "qnum";
+      qn.textContent = String(qty);
 
       const plus = document.createElement("button");
       plus.className = "qbtn";
+      plus.type = "button";
       plus.textContent = "+";
 
       const del = document.createElement("button");
       del.className = "del";
+      del.type = "button";
       del.textContent = "حذف";
 
       minus.addEventListener("click", () => {
@@ -312,114 +309,101 @@ function renderCartOverlay(){
           const next = cur - 1;
           if(next === 0) delete state.cart[id];
           else state.cart[id] = next;
-          saveCart();
-          updateCounts();
-          renderCartOverlay();
+          saveCart(); updateCounts(); renderCart();
         }
       });
 
       plus.addEventListener("click", () => {
         state.cart[id] = (state.cart[id] || 0) + 1;
-        saveCart();
-        updateCounts();
-        renderCartOverlay();
+        saveCart(); updateCounts(); renderCart();
       });
 
       del.addEventListener("click", () => {
         delete state.cart[id];
-        saveCart();
-        updateCounts();
-        renderCartOverlay();
+        saveCart(); updateCounts(); renderCart();
       });
 
-      right.append(minus, qnum, plus, del);
-
-      row.append(left, right);
+      right.append(minus, qn, plus);
+      row.append(left, right, del);
       cartList.appendChild(row);
-    });
+    }
   }
 
   totalPriceEl.textContent = formatSAR(cartTotalPrice());
 }
 
-// ===== WhatsApp إرسال =====
-function buildWhatsAppMessage(){
-  const name  = (customerName.value || "").trim();
-  const phone = (customerPhone.value || "").trim();
+// ===== WhatsApp =====
+function buildMessage(){
+  const name  = (custName.value || "").trim() || "غير مذكور";
+  const phone = (custPhone.value || "").trim() || "غير مذكور";
 
-  const branchText = branchLabel();
   const lines = [];
   lines.push("طلب جديد - سمبوساتي");
-  lines.push(branchText);
+  lines.push(branchLabel());
   lines.push("—");
 
-  const entries = Object.entries(state.cart);
-  if(entries.length === 0){
-    lines.push("السلة فارغة");
-  } else {
-    for(const [id, qty] of entries){
-      const item = getItemById(id);
-      if(!item) continue;
-      const itemTotal = (Number(item.price)||0) * qty;
-      lines.push(`• ${item.name} × ${qty} = ${formatSAR(itemTotal)}`);
-    }
+  for(const [id, qty] of Object.entries(state.cart)){
+    const it = getItemById(id);
+    if(!it) continue;
+    const t = (Number(it.price)||0) * qty;
+    lines.push(`• ${it.name} × ${qty} = ${formatSAR(t)}`);
   }
 
   lines.push("—");
   lines.push(`الإجمالي: ${formatSAR(cartTotalPrice())}`);
   lines.push("—");
-  lines.push(`اسم العميل: ${name || "غير مذكور"}`);
-  lines.push(`رقم الجوال: ${phone || "غير مذكور"}`);
+  lines.push(`اسم العميل: ${name}`);
+  lines.push(`رقم الجوال: ${phone}`);
 
   return lines.join("\n");
 }
 
-function openWhatsApp(){
+function sendToWA(){
   if(cartTotalCount() === 0){
     alert("سلتك فاضية. اختر أصناف قبل الإرسال.");
     return;
   }
-
-  const msg = buildWhatsAppMessage();
-  const to  = branchPhone(); // رقم الفرع
-  const url = `https://wa.me/${to}?text=${encodeURIComponent(msg)}`;
+  const url = `https://wa.me/${branchPhone()}?text=${encodeURIComponent(buildMessage())}`;
   window.open(url, "_blank");
 }
 
 // ===== Events =====
 document.querySelectorAll(".branch-card").forEach(btn => {
   btn.addEventListener("click", () => {
-    setBranch(btn.dataset.branch);
-    showMenuPage();
+    state.branch = btn.dataset.branch;
+    localStorage.setItem("branch", state.branch);
+    showMenu();
     renderTabs();
     renderItems();
     updateCounts();
   });
 });
 
-changeBranchBtn.addEventListener("click", () => {
-  setBranch(null);
+changeBranch.addEventListener("click", () => {
+  state.branch = "";
   localStorage.removeItem("branch");
-  showBranchPage();
+  showBranch();
 });
 
-checkoutFab.addEventListener("click", openOverlay);
-cartMiniBtn.addEventListener("click", openOverlay);
-closeOverlayBtn.addEventListener("click", closeOverlay);
-overlay.addEventListener("click", (e) => {
-  if(e.target === overlay) closeOverlay();
-});
+cartBtn.addEventListener("click", openOverlay);
+checkoutBtn.addEventListener("click", openOverlay);
+closeOverlay.addEventListener("click", closeOverlayFn);
+overlay.addEventListener("click", (e) => { if(e.target === overlay) closeOverlayFn(); });
 
-sendWhatsAppBtn.addEventListener("click", openWhatsApp);
+sendWA.addEventListener("click", sendToWA);
 
 // ===== Init =====
 (function init(){
+  // شيل وضع preload بعد ما يبدأ JS (هذا اللي يمنع ظهور الصفحات مع بعض)
+  document.body.classList.remove("preload");
+
   updateCounts();
+
   if(state.branch){
-    showMenuPage();
+    showMenu();
     renderTabs();
     renderItems();
   } else {
-    showBranchPage();
+    showBranch();
   }
 })();
