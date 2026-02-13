@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>سمبوساتي | المنيو الإلكتروني</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="brand">
+      <img class="brand-logo" src="assets/logo.jpg" alt="شعار سمبوساتي">
+      <div class="brand-text">
+        <div class="brand-name">سمبوساتي</div>
+        <div class="brand-sub">منيو إلكتروني • طلب سريع عبر واتساب</div>
+      </div>
+    </div>
+
+    <button class="cart-mini" id="cartMiniBtn" aria-label="السلة">
+      <span class="cart-emoji">🛒</span>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </header>
+
+  <!-- Branch Page -->
+  <main class="page" id="branchPage">
+    <section class="hero">
+      <div class="hero-card">
+        <img class="hero-logo" src="assets/logo.jpg" alt="Sambosati">
+        <h1>اختر الفرع</h1>
+        <p>بعد اختيار الفرع، سيتم إرسال الطلب تلقائيًا للواتساب الخاص بالفرع.</p>
+
+        <div class="branch-grid">
+          <button class="branch-card" data-branch="majidiya">
+            <div class="branch-title">فرع المجيدية</div>
+            <div class="branch-meta">طلب سريع • صور واضحة • تجربة فخمة</div>
+          </button>
+
+          <button class="branch-card" data-branch="miyas">
+            <div class="branch-title">فرع مياس</div>
+            <div class="branch-meta">طلب سريع • صور واضحة • تجربة فخمة</div>
+          </button>
+        </div>
+
+        <div class="hint">* تقدر تغيّر أرقام الفروع لاحقًا بسهولة</div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>مطوّر بواسطة <b>MenuLink</b> 📲</span>
+        <a class="footer-phone" href="tel:0593937921">0593937921</a>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Menu Page -->
+  <main class="page hidden" id="menuPage">
+
+    <section class="menu-head">
+      <div class="branch-pill" id="branchPill"></div>
+      <button class="ghost" id="changeBranchBtn">تغيير الفرع</button>
+    </section>
+
+    <!-- Tabs -->
+    <nav class="tabs" id="tabs"></nav>
+
+    <!-- Items -->
+    <section class="items" id="items"></section>
+
+    <!-- Checkout FAB -->
+    <button class="checkout-fab" id="checkoutFab">
+      إتمام الطلب
+      <span class="fab-count" id="fabCount">0</span>
+    </button>
+
+    <footer class="footer footer-menu">
+      <div class="footer-inner">
+        <span>مطوّر بواسطة <b>MenuLink</b> 📲</span>
+        <a class="footer-phone" href="tel:0593937921">0593937921</a>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Overlay Cart -->
+  <div class="overlay hidden" id="overlay">
+    <div class="sheet">
+      <div class="sheet-header">
+        <div>
+          <div class="sheet-title">إتمام الطلب</div>
+          <div class="sheet-sub" id="sheetBranch"></div>
+        </div>
+        <button class="icon-btn" id="closeOverlayBtn" aria-label="إغلاق">✕</button>
+      </div>
+
+      <div class="sheet-body">
+        <div class="cart-list" id="cartList"></div>
+
+        <div class="summary">
+          <div class="sum-row">
+            <span>الإجمالي</span>
+            <b id="totalPrice">0</b>
+          </div>
+          <div class="sum-note">الأسعار شاملة حسب المنيو.</div>
+        </div>
+
+        <div class="form">
+          <label>اسم العميل</label>
+          <input id="customerName" type="text" placeholder="اكتب الاسم" />
+
+          <label>رقم الجوال</label>
+          <input id="customerPhone" type="tel" inputmode="numeric" placeholder="05xxxxxxxx" />
+        </div>
+
+        <button class="whatsapp-btn" id="sendWhatsAppBtn">
+          إرسال الطلب عبر واتساب
+        </button>
+
+        <div class="mini-note">
+          بالضغط على إرسال سيتم فتح واتساب وإرسال الطلب للفرع المختار.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
