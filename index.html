@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>سمبوساتي | المنيو الإلكتروني</title>
+  <title>سمبوساتي | منيو إلكتروني</title>
 
-  <!-- خط عربي لطيف (اختياري) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&display=swap" rel="stylesheet">
@@ -14,133 +13,118 @@
 </head>
 
 <body class="preload">
-  <noscript>
-    <div class="noscript">
-      الموقع يحتاج تشغيل JavaScript عشان يشتغل المنيو والسلة.
-    </div>
-  </noscript>
 
-  <!-- Top Bar -->
-  <header class="topbar">
-    <div class="brand">
-      <img class="logo" src="assets/logo.jpg" alt="Sambosati Logo" onerror="this.style.display='none'">
-      <div class="brand-text">
-        <div class="brand-name">سمبوساتي</div>
-        <div class="brand-sub">منيو إلكتروني • طلب سريع عبر واتساب</div>
-      </div>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo-box">
+      <img id="storeLogo" src="assets/logo.jpg" alt="Sambosati Logo" onerror="this.style.display='none'">
     </div>
-
-    <button class="cart-btn" id="cartBtn" type="button">
-      <span class="cart-ic">🛒</span>
-      <span class="cart-count" id="cartCount">0</span>
-    </button>
+    <div class="store-name">سمبوساتي</div>
+    <div class="store-sub">منيو إلكتروني • طلب سريع عبر واتساب</div>
   </header>
 
-  <!-- APP -->
-  <main class="app">
+  <!-- صفحة اختيار الفرع -->
+  <section id="branchPage" class="branch-wrap" hidden>
+    <div class="branch-title">اختر الفرع</div>
+    <div class="branch-desc">
+      بعد اختيار الفرع، سيتم تجهيز الطلب وإرساله مباشرة على واتساب الفرع.
+    </div>
 
-    <!-- صفحة اختيار الفرع -->
-    <section class="page" id="pageBranch" hidden>
-      <div class="wrap">
-        <div class="panel">
-          <img class="hero-logo" src="assets/logo.jpg" alt="Sambosati" onerror="this.style.display='none'">
-          <h1 class="h1">اختر الفرع</h1>
-          <p class="p">بعد اختيار الفرع، سيتم تجهيز الطلب وإرساله مباشرة على واتساب الفرع.</p>
+    <div class="branch-card" data-branch="majidiya">
+      <h3>فرع المجيدية</h3>
+      <p>تجربة سريعة • منيو مرتب • طلب مباشر</p>
+    </div>
 
-          <div class="branch-grid">
-            <button class="branch-card" type="button" data-branch="majidiya">
-              <div class="branch-title">فرع المجيدية</div>
-              <div class="branch-meta">تجربة سريعة • منيو مرتب • صور واضحة</div>
-            </button>
+    <div class="branch-card" data-branch="miyas">
+      <h3>فرع مياس</h3>
+      <p>تجربة سريعة • منيو مرتب • طلب مباشر</p>
+    </div>
 
-            <button class="branch-card" type="button" data-branch="miyas">
-              <div class="branch-title">فرع مياس</div>
-              <div class="branch-meta">تجربة سريعة • منيو مرتب • صور واضحة</div>
-            </button>
-          </div>
+    <div class="dev-footer">
+      مطوّر بواسطة <b>MenuLink</b> 📲 — <a href="tel:0593937921">0593937921</a>
+    </div>
+  </section>
 
-          <div class="tiny">* تقدر تغيّر أرقام الفروع لاحقًا بسهولة</div>
-        </div>
-      </div>
+  <!-- صفحة المنيو -->
+  <section id="menuPage" hidden>
+    <!-- شريط علوي صغير -->
+    <div class="menu-top">
+      <div class="branch-pill" id="branchPill">الفرع</div>
+      <button class="change-branch" id="changeBranchBtn" type="button">تغيير الفرع</button>
 
-      <footer class="footer">
-        <div class="footer-inner">
-          <span>مطوّر بواسطة <b>MenuLink</b> 📲</span>
-          <a href="tel:0593937921">0593937921</a>
-        </div>
-      </footer>
-    </section>
-
-    <!-- صفحة المنيو -->
-    <section class="page" id="pageMenu" hidden>
-      <div class="menu-head wrap">
-        <div class="pill" id="branchPill">الفرع المختار</div>
-        <button class="ghost" id="changeBranch" type="button">تغيير الفرع</button>
-      </div>
-
-      <!-- شريط الأقسام -->
-      <div class="wrap">
-        <nav class="tabs" id="tabs"></nav>
-      </div>
-
-      <!-- المنتجات -->
-      <div class="wrap">
-        <div class="items" id="items"></div>
-      </div>
-
-      <!-- زر إتمام الطلب -->
-      <button class="checkout" id="checkoutBtn" type="button">
-        إتمام الطلب
-        <span class="checkout-count" id="checkoutCount">0</span>
+      <button class="mini-cart-btn" id="miniCartBtn" type="button" aria-label="Cart">
+        🛒 <span id="miniCartCount">0</span>
       </button>
+    </div>
 
-      <footer class="footer footer-menu">
-        <div class="footer-inner">
-          <span>مطوّر بواسطة <b>MenuLink</b> 📲</span>
-          <a href="tel:0593937921">0593937921</a>
-        </div>
-      </footer>
-    </section>
+    <!-- Tabs -->
+    <div class="category-tabs" id="tabs"></div>
 
-  </main>
+    <!-- Menu -->
+    <div class="menu" id="menu"></div>
 
-  <!-- Overlay السلة -->
-  <div class="overlay" id="overlay" hidden>
-    <div class="sheet" role="dialog" aria-modal="true">
-      <div class="sheet-top">
-        <div>
-          <div class="sheet-title">إتمام الطلب</div>
-          <div class="sheet-sub" id="sheetBranch">الفرع</div>
-        </div>
-        <button class="x" id="closeOverlay" type="button">✕</button>
+    <div class="dev-footer">
+      مطوّر بواسطة <b>MenuLink</b> 📲 — <a href="tel:0593937921">0593937921</a>
+    </div>
+  </section>
+
+  <!-- شريط السلة -->
+  <div class="cart-bar hidden" id="cartBar">
+    <div class="cart-total">
+      <b id="cartTotalText">0 ريال</b>
+      <small id="cartItemsText">0 صنف</small>
+    </div>
+    <button class="cart-open-btn" id="checkoutBtn" type="button">إتمام الطلب</button>
+  </div>
+
+  <!-- Sheet: اختيار كمية + إضافة -->
+  <div class="sheet-overlay" id="productOverlay">
+    <div class="sheet">
+      <div class="sheet-header">
+        <span id="sheetProductName">—</span>
+        <span id="sheetProductPrice">—</span>
       </div>
 
-      <div class="sheet-body">
-        <div class="cart-list" id="cartList"></div>
+      <textarea class="sheet-note" id="sheetNote" placeholder="ملاحظات (اختياري)"></textarea>
 
-        <div class="total">
-          <span>الإجمالي</span>
-          <b id="totalPrice">0 ريال</b>
-        </div>
-
-        <div class="form">
-          <label>اسم العميل</label>
-          <input id="custName" type="text" placeholder="اكتب الاسم" />
-
-          <label>رقم الجوال</label>
-          <input id="custPhone" type="tel" inputmode="numeric" placeholder="05xxxxxxxx" />
-        </div>
-
-        <button class="wa" id="sendWA" type="button">
-          إرسال الطلب عبر واتساب
-        </button>
-
-        <div class="note">بالضغط على إرسال سيتم فتح واتساب وإرسال الطلب للفرع المختار.</div>
+      <div class="sheet-qty-row">
+        <button class="qty-arrow" id="qtyMinus" type="button">−</button>
+        <span id="sheetQty">1</span>
+        <button class="qty-arrow" id="qtyPlus" type="button">+</button>
       </div>
+
+      <button class="sheet-add-btn" id="addToCartBtn" type="button">إضافة للسلة</button>
+      <button class="sheet-close" id="closeProductSheet" type="button">إغلاق</button>
     </div>
   </div>
 
-  <!-- مهم: defer عشان يشتغل قبل عرض الصفحات -->
+  <!-- Sheet: السلة -->
+  <div class="sheet-overlay" id="cartOverlay">
+    <div class="sheet sheet-cart">
+      <div class="sheet-cart-header">
+        <div>
+          <div style="font-weight:900">إتمام الطلب</div>
+          <div style="font-size:12px;color:#6b7280;margin-top:4px" id="cartBranchText">الفرع</div>
+        </div>
+        <button class="sheet-close-x" id="closeCartSheet" type="button">✕</button>
+      </div>
+
+      <div class="cart-items" id="cartItems"></div>
+
+      <div style="margin-top:10px;display:flex;justify-content:space-between;font-weight:900">
+        <span>الإجمالي</span>
+        <span id="cartTotalPrice">0 ريال</span>
+      </div>
+
+      <div class="customer-box">
+        <input id="customerName" type="text" placeholder="اسم العميل">
+        <input id="customerPhone" type="tel" inputmode="numeric" placeholder="رقم الجوال (05xxxxxxxx)">
+      </div>
+
+      <button class="whatsapp-btn" id="sendWhatsappBtn" type="button">إرسال الطلب عبر واتساب</button>
+    </div>
+  </div>
+
   <script defer src="app.js"></script>
 </body>
 </html>
